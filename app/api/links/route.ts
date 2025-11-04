@@ -70,8 +70,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Safely obtain a string representation of the user's id for rate-limiting.
+    // Mongoose _id can be an ObjectId (with toString) or a string.
+  const rawUserId: unknown = (user as { _id?: { toString(): string } | string })._id;
+    let userIdStr: string;
+    if (
+      rawUserId !== null &&
+      typeof rawUserId === 'object' &&
+      typeof (rawUserId as { toString?: unknown }).toString === 'function'
+    ) {
+      userIdStr = (rawUserId as { toString(): string }).toString();
+    } else {
+      userIdStr = String(rawUserId);
+    }
+
     // Check rate limit
-    if (!checkRateLimit(user._id.toString())) {
+    if (!checkRateLimit(userIdStr)) {
       return NextResponse.json(
         { error: 'Rate limit exceeded. Maximum links per day reached.' },
         { status: 429 }
