@@ -21,6 +21,7 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
   const displayCode = link.customAlias || link.shortCode;
   const shortUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${displayCode}`;
 
+
   const handleCopy = () => {
     navigator.clipboard.writeText(shortUrl);
     setCopied(true);
