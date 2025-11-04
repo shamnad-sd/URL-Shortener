@@ -49,10 +49,25 @@ export const authOptions: NextAuthOptions = {
       try {
         await connectDB();
         
-        const dbUser = await User.findOne({ email: session.user?.email });
-        
+        // Narrow the expected shape for dbUser to avoid `any` while still
+        // handling whatever Mongoose returns for the `_id` field.
+        const dbUser = (await User.findOne({ email: session.user?.email })) as
+          | { _id?: { toString(): string } | string }
+          | null;
+
         if (dbUser && session.user) {
-          session.user.id = dbUser._id.toString();
+          // dbUser._id may be a Mongoose ObjectId; treat it as unknown then
+          // detect and call toString() if available, otherwise fallback to String().
+          const rawId: unknown = dbUser._id;
+          if (
+            rawId !== null &&
+            typeof rawId === 'object' &&
+            typeof (rawId as { toString?: unknown }).toString === 'function'
+          ) {
+            session.user.id = (rawId as { toString(): string }).toString();
+          } else {
+            session.user.id = String(rawId);
+          }
         }
         
         return session;
