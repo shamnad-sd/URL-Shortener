@@ -6,10 +6,10 @@ import { parseUserAgent } from '../../../../lib/utils';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { shortCode: string } }
+  context: { params: Promise<{ shortCode: string }> }
 ) {
   try {
-    const { shortCode } = await params;
+    const { shortCode } = await context.params;
     await connectDB();
 
     // Find by shortCode or customAlias
