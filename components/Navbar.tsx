@@ -11,7 +11,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50 sticky top-0 z-50">
+    <nav className="bg-[#123c31] backdrop-blur-md border-b border-slate-700/50 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -44,7 +44,7 @@ export default function Navbar() {
 
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-white">{session.user?.name}</span>
-                    <span className="text-xs text-slate-500">{session.user?.email}</span>
+                    <span className="text-xs text-slate-300">{session.user?.email}</span>
                   </div>
 
                   <Link href="/dashboard" className="text-slate-300 hover:text-emerald-500 font-medium transition-colors">
