@@ -19,6 +19,8 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
   const [editAlias, setEditAlias] = useState(link.customAlias || "")
   const [loading, setLoading] = useState(false)
 
+  const [localClickCount, setLocalClickCount] = useState(link.clickCount);
+
   const displayCode = link.customAlias || link.shortCode
   const shortUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${displayCode}`
 
@@ -86,7 +88,7 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
               }}
             >
               Yes
-            </button> 
+            </button>
             <button
               className="px-3 py-2 bg-gray-600 text-white rounded-xl   hover:bg-gray-700 transition"
               onClick={() => toast.dismiss(t.id)}
@@ -115,6 +117,18 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
     setEditUrl(link.originalUrl)
     setEditAlias(link.customAlias || "")
   }, [link._id, link.originalUrl, link.customAlias])
+
+  useEffect(() => {
+    setLocalClickCount(link.clickCount);
+  }, [link.clickCount]);
+
+  useEffect(() => {
+    const handleFocus = () => {
+      onUpdate();
+    };
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, [onUpdate]);
 
   // Responsive EDIT MODE
   if (isEditing) {
