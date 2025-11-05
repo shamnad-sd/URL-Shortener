@@ -159,13 +159,13 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
             <button
               onClick={handleUpdate}
               disabled={loading}
-              className="px-4 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/50 rounded-lg transition text-sm sm:text-base disabled:opacity-50"
+              className="px-4 py-2 bg-emerald-500/20 cursor-pointer hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/50 rounded-lg transition text-sm sm:text-base disabled:opacity-50"
             >
               {loading ? "Saving..." : "Save"}
             </button>
             <button
               onClick={() => setIsEditing(false)}
-              className="px-4 py-2 bg-slate-700/30 hover:bg-slate-700/50 text-slate-300 border border-slate-600/50 rounded-lg transition text-sm sm:text-base"
+              className="px-4 py-2 bg-slate-700/30 cursor-pointer hover:bg-slate-700/50 text-slate-300 border border-slate-600/50 rounded-lg transition text-sm sm:text-base"
             >
               Cancel
             </button>
