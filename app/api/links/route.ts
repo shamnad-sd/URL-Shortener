@@ -7,7 +7,7 @@ import User from '../../../lib/models/User';
 import { generateShortCode, isValidAlias, isValidUrl } from '../../../lib/utils';
 
 
-// In-memory rate limiting (use Redis in production)
+
 const rateLimitStore = new Map<string, number>();
 
 function checkRateLimit(userId: string): boolean {
@@ -70,8 +70,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Safely obtain a string representation of the user's id for rate-limiting.
-    // Mongoose _id can be an ObjectId (with toString) or a string.
   const rawUserId: unknown = (user as { _id?: { toString(): string } | string })._id;
     let userIdStr: string;
     if (

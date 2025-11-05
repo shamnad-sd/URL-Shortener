@@ -12,7 +12,6 @@ export async function GET(
     const { shortCode } = await context.params;
     await connectDB();
 
-    // Find by shortCode or customAlias
     const link = await Link.findOne({
       $or: [{ shortCode }, { customAlias: shortCode }],
       isActive: true
@@ -40,7 +39,7 @@ export async function GET(
       referrer,
     }).catch(console.error);
 
-    // Increment click count
+
     await Link.findByIdAndUpdate(link._id, { $inc: { clickCount: 1 } });
 
     // Redirect to original URL

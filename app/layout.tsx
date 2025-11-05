@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '../components/Navbar';
 import { Toaster } from 'react-hot-toast';
 import { SessionProvider } from '../components/SessionProvider';
+import Footer from '../components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -60,6 +61,7 @@ export default function RootLayout({
           />
           <Navbar />
           {children}
+          <Footer/>
         </SessionProvider>
       </body>
     </html>

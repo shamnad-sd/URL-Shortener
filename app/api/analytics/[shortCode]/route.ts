@@ -38,7 +38,7 @@ export async function GET(
     // Fetch analytics data
     const analyticsData = await Analytics.find({ linkId: link._id })
       .sort({ timestamp: -1 })
-      .limit(100) // Limit to recent 100 clicks
+      .limit(100)
       .lean();
 
     // Aggregate data
