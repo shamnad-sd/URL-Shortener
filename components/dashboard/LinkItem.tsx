@@ -90,7 +90,7 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
               Yes
             </button>
             <button
-              className="px-3 py-2 bg-gray-600 text-white rounded-xl   hover:bg-gray-700 transition"
+              className="px-3 py-2 bg-gray-600 text-white rounded-xl  cursor-pointer  hover:bg-gray-700 transition"
               onClick={() => toast.dismiss(t.id)}
             >
               Cancel
