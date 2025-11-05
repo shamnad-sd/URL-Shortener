@@ -1,111 +1,127 @@
-'use client';
+"use client"
 
-import { useState } from 'react';
+import type React from "react"
+import { useState } from "react"
+import { Check, AlertCircle, Sparkles } from "lucide-react"
+import toast from 'react-hot-toast';
 
-interface LinkFormProps {
-  onSuccess: () => void;
-}
-
-export default function LinkForm({ onSuccess }: LinkFormProps) {
-  const [originalUrl, setOriginalUrl] = useState('');
-  const [customAlias, setCustomAlias] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+export default function LinkForm({ onSuccess }: { onSuccess: () => void }) {
+  const [originalUrl, setOriginalUrl] = useState("")
+  const [customAlias, setCustomAlias] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess('');
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    setSuccess("")
 
     try {
-      const res = await fetch('/api/links', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/links", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           originalUrl,
           customAlias: customAlias || undefined,
         }),
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
 
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to create link');
+        throw new Error(data.error || "Failed to create link")
       }
 
-      setSuccess(`Link created! ${data.shortUrl}`);
-      setOriginalUrl('');
-      setCustomAlias('');
-      
-      // Notify parent to refresh
+      toast.success(`Link created! ${data.shortUrl}`)
+      setOriginalUrl("")
+      setCustomAlias("")
+
       setTimeout(() => {
-        onSuccess();
-        setSuccess('');
-      }, 2000);
+        onSuccess()
+        setSuccess("")
+      }, 2000)
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Create Short Link</h2>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 backdrop-blur-xl shadow-2xl">
+      <div className="flex items-center gap-3 mb-8">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Original URL *
-          </label>
+          <h2 className="text-2xl font-bold text-white">Create Short Link</h2>
+          <p className="text-sm text-slate-400">Transform your long URLs instantly</p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Original URL Input */}
+        <div>
+          <label className="block text-sm font-semibold text-slate-200 mb-2">Original URL *</label>
           <input
             type="url"
             value={originalUrl}
             onChange={(e) => setOriginalUrl(e.target.value)}
             placeholder="https://example.com/very/long/url"
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-slate-700/40 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/80 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200"
           />
+          <p className="text-xs text-slate-400 mt-2">Paste the URL you want to shorten</p>
         </div>
 
+        {/* Custom Alias Input */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Custom Alias (optional)
+          <label className="block text-sm font-semibold text-slate-200 mb-2">
+            Custom Alias <span className="text-slate-400 font-normal">(Optional)</span>
           </label>
-          <input
-            type="text"
-            value={customAlias}
-            onChange={(e) => setCustomAlias(e.target.value)}
-            placeholder="my-custom-link"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <p className="text-xs text-gray-500 mt-1">
-            Only letters, numbers, hyphens, and underscores (3-50 chars)
-          </p>
+          <div className="flex gap-2 items-center">
+            <input
+              type="text"
+              value={customAlias}
+              onChange={(e) => setCustomAlias(e.target.value)}
+              placeholder="my-awesome-link"
+              className="flex-1 px-4 py-3 bg-slate-700/40 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/80 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200"
+            />
+          </div>
+          <p className="text-xs text-slate-400 mt-2">Letters, numbers, hyphens, underscores (3-50 chars)</p>
         </div>
 
+        {/* Error Message */}
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-600">{error}</p>
+          <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+            <p className="text-sm text-red-300">{error}</p>
           </div>
         )}
 
+        {/* Success Message */}
         {success && (
-          <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-sm text-green-600">{success}</p>
+          <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+            <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+            <p className="text-sm text-emerald-300">{success}</p>
           </div>
         )}
 
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-3 bg-green-700 hover:from-green-900 hover:to-teal-600 text-white cursor-pointer disabled:from-slate-600 disabled:to-slate-600 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:scale-100  disabled:shadow-none"
         >
-          {loading ? 'Creating...' : 'Create Short Link'}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              Creating...
+            </span>
+          ) : (
+            "Create Short Link"
+          )}
         </button>
       </form>
     </div>
-  );
+  )
 }
