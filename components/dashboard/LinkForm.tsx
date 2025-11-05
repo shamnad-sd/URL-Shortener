@@ -50,6 +50,7 @@ export default function LinkForm({ onSuccess }: { onSuccess: () => void }) {
   }
 
   return (
+    <div className="lg:sticky lg:top-20">
     <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 backdrop-blur-xl shadow-2xl">
       <div className="flex items-center gap-3 mb-8">
         <div>
@@ -122,6 +123,7 @@ export default function LinkForm({ onSuccess }: { onSuccess: () => void }) {
           )}
         </button>
       </form>
+    </div>
     </div>
   )
 }
