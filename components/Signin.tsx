@@ -38,7 +38,6 @@ const Signin = () => {
                             </div>
                             <div>
                                 <p className="text-sm text-slate-400">Secure Login</p>
-                                <p className="text-xs text-slate-500">Google OAuth 2.0</p>
                             </div>
                         </div>
                     </div>
