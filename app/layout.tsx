@@ -8,7 +8,7 @@ import { SessionProvider } from '../components/SessionProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'ShortLink - URL Shortener',
+  title: 'LinkVault - URL Shortener',
   description: 'Shorten URLs and track analytics',
 };
 

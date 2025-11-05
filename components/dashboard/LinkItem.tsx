@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import type { Link as LinkType } from "../../types"
 import { Copy, Check, Trash2, Edit2, Eye, TrendingUp, Calendar } from "lucide-react"
+import toast from "react-hot-toast"
 
 interface LinkItemProps {
   link: LinkType
@@ -42,34 +43,61 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
       if (res.ok) {
         setIsEditing(false)
         onUpdate()
-        alert("Link updated successfully!")
+        toast.success("Link updated successfully!")
       } else {
         const data = await res.json()
-        alert(data.error || "Failed to update link")
+        toast.error(data.error || "Failed to update link")
       }
     } catch (error) {
-      alert("Error updating link")
+      toast.error("Error updating link")
     } finally {
       setLoading(false)
     }
   }
 
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this link?")) return
-
+  const doDelete = async () => {
     try {
       const res = await fetch(`/api/links/${link._id}`, {
         method: "DELETE",
       })
 
       if (res.ok) {
+        toast.success("Link deleted successfully!")
         onDelete()
       } else {
-        alert("Failed to delete link")
+        toast.error("Failed to delete link")
       }
     } catch (error) {
-      alert("Error deleting link")
+      toast.error("Error deleting link")
     }
+  }
+
+  const handleDelete = () => {
+    toast(
+      (t) => (
+        <div className="flex flex-col sm:flex-row items-center gap-3 ">
+          <span>Are you sure you want to delete this link?</span>
+          <div className="flex gap-2 ">
+            <button
+              className="px-3 py-2 bg-red-600  cursor-pointer  text-white rounded-xl hover:bg-red-700 transition"
+              onClick={() => {
+                toast.dismiss(t.id)
+                doDelete()
+              }}
+            >
+              Yes
+            </button> 
+            <button
+              className="px-3 py-2 bg-gray-600 text-white rounded-xl   hover:bg-gray-700 transition"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    )
   }
 
   const formatDate = (dateString: string) => {
@@ -180,7 +208,7 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
         <div className="flex items-center gap-2 flex-shrink-0 mt-2 sm:mt-0">
           <button
             onClick={() => setShowAnalytics(!showAnalytics)}
-            className="p-2 bg-slate-700/30 cursor-pointer  hover:bg-blue-500/20 text-slate-300 hover:text-blue-400 rounded-lg transition"
+            className="p-2 bg-slate-700/30 cursor-pointer hover:bg-blue-500/20 text-slate-300 hover:text-blue-400 rounded-lg transition"
           >
             <TrendingUp className="w-5 h-5" />
           </button>
@@ -209,7 +237,6 @@ export default function LinkItem({ link, onUpdate, onDelete }: LinkItemProps) {
   )
 }
 
-// Separate analytics view, also made responsive/minimal for mobile
 function AnalyticsView({ shortCode }: { shortCode: string }) {
   const [analytics, setAnalytics] = useState<any>(null)
   const [loading, setLoading] = useState(false)
@@ -234,7 +261,7 @@ function AnalyticsView({ shortCode }: { shortCode: string }) {
 
   useEffect(() => {
     if (!loaded && !loading) fetchAnalytics()
-  }, []) // auto-fetch on mount
+  }, [])
 
   if (loading) {
     return <p className="text-xs sm:text-sm text-slate-400">Loading analytics...</p>
