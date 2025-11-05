@@ -37,7 +37,7 @@ export default function Dashboard() {
             <h1 className="text-4xl font-bold text-white mb-2">
               Welcome back, {session?.user?.name?.split(" ")[0]}!
             </h1>
-            <p className="text-slate-400 text-lg">Manage and track your shortened links</p>
+            <p className="text-gray-300 text-lg">Manage and track your shortened links</p>
           </div>
         </div>
 
