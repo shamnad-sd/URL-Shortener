@@ -3,10 +3,8 @@
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import Navbar from "../../components/Navbar"
 import LinkForm from "../../components/dashboard/LinkForm"
 import LinkList from "../../components/dashboard/LinkList"
-import { Plus, Zap, TrendingUp } from "lucide-react"
 import Loader from "../../components/Loader"
 
 export default function Dashboard() {

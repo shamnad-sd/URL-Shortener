@@ -26,8 +26,6 @@ export async function GET(
     }
 
     const { shortCode } = await params;
-
-    // Find link and verify ownership
     const link = await Link.findOne({ shortCode, userId: user._id });
 
     if (!link) {

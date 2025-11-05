@@ -28,8 +28,6 @@ export async function PUT(
     const { id } = await params;
     const body = await req.json();
     const { originalUrl, customAlias } = body;
-
-    // Find link and verify ownership
     const link = await Link.findOne({ _id: id, userId: user._id });
 
     if (!link) {
